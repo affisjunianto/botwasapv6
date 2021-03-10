@@ -28,6 +28,11 @@ you've just cloned!!
 > npm start
 ```
 
+### Setting
+Change admin and all in folder
+[`HERE`](https://github.com/affisjunianto/botwasapv6/admin/set.json)
+
+
 ## Features
 
 | Sticker Creator |                Feature           |
