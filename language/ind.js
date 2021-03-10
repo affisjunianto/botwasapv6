@@ -116,11 +116,10 @@ exports.reglevelahf = (command, pushname, getLevelingLevel, sender, ahf) => {
 	return`*Maaf ${pushname} level mu belum mencukupi*\n\n*┏⊱level mu : ${getLevelingLevel(sender)}*\n*┣⊱jenis command : ${command}*\n*┗⊱syarat level : ${ahf}*\n\n_NOTE : CHAT/SELALU ON UNTUK MENDAPATKAN XP_`
 }
 
-exports.menu = (pushname, prefix, getLevelingLevel, getLevelingXp, sender, reqXp, _registered, uangku, role, premi, client , process) => { 
+exports.menu = (pushname, prefix, getLevelingLevel, getLevelingXp, sender, reqXp, _registered, uangku, role, client , process) => { 
 	return `
 ${a}❏ ABOUT USER${a}
  ${a}│ Nama : ${pushname}${a}
- ${a}│ Premium :${a} ${premi}
  ${a}│ Nomer : wa.me/${sender.split("@")[0]}${a}
  ${a}│ Uang mu : Rp${uangku}${a}
  ${a}│ XP : ${getLevelingXp(sender)}/${reqXp} ${a}
@@ -154,25 +153,25 @@ ${a}❏FUN MENU${a}
  ${a}│•${prefix}glitchtext${a}
  ${a}│•${prefix}slap${a}
  ${a}│•${prefix}tampar${a}
- ${a}│•${prefix}moddroid${a} *[VIP]*
- ${a}╰•${prefix}happymod${a} *[VIP]*
+ ${a}│•${prefix}moddroid${a} 
+ ${a}╰•${prefix}happymod${a} 
  
 ${a}❏MUTUAL${a}
  ${a}│•${prefix}mutual${a}
  ${a}╰•${prefix}next${a}
  
 ${a}❏MEDIA MENU${a}
- ${a}│•${prefix}brainly${a} *[VIP]*
+ ${a}│•${prefix}brainly${a}
  ${a}│•${prefix}pinterest${a}
  ${a}│•${prefix}resepmasakan${a}
  ${a}│•${prefix}igstalk${a}
  ${a}│•${prefix}bitly${a}
- ${a}│•${prefix}tiktokstalk${a} *[VIP]*
+ ${a}│•${prefix}tiktokstalk${a}
  ${a}│•${prefix}ssweb${a}
  ${a}╰•${prefix}kbbi${a}
  
 ${a}❏SONG${a}
- ${a}╰•${prefix}joox${a} *[VIP]*
+ ${a}╰•${prefix}joox${a}
  
 ${a}❏NSFW${a}
  ${a}│•${prefix}anjing${a}
@@ -307,24 +306,6 @@ exports.satukos = () => {
 
 exports.uangkau = (pushname, sender, uangkau) => {
 	return`*┏⊱ 「 ATM 」⊰━┓*\n┣⊱ *Nama* : ${pushname}\n┣⊱ *Nomer* : ${sender.split("@")[0]}\n┣⊱ *Uang* : ${uangkau}\n┗━━━━━━━━━━`
-}
-
-exports.premadd = (pnom) => {
-	return`*「 PREMIUM ADD 」*
-
-*Name* : ${pnom}
-*Expired* : 30 DAY\n*thank for order premium*`
-}
-
-exports.dellprem = (hnom) => {
-	return`*「 PREMIUM DELETE 」*
-
-*Name* : ${hnom}
-*Expired* : NOW:v\n*thank for order premium back soon for buying again:D*`
-}
-
-exports.premon = (pushname) => {
-	return`MAAF ${pushname} ANDA BUKAN USER PREMIUM`
 }
 
 exports.afkOn = (pushname, reason) => {
