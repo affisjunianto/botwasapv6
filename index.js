@@ -86,13 +86,6 @@ const {
 	limitAdd
 } = require('./lib/limitatm.js')
 
-/*[-> premium <-]*/
-const {
-	getPremiumExpired,
-	expiredCheck,
-	getAllPremiumUser
-} = require('./lib/premi.js')
-
 /*[-> afk <-]*/
 const {
 	addAfkUser,
@@ -126,7 +119,6 @@ const samih = JSON.parse(fs.readFileSync('./database/bot/simi.json'))
 const event = JSON.parse(fs.readFileSync('./database/bot/event.json'))
 const _limit = JSON.parse(fs.readFileSync('./database/user/limit.json'))
 const uang = JSON.parse(fs.readFileSync('./database/user/uang.json'))
-const prem = JSON.parse(fs.readFileSync('./database/user/prem.json'))
 const antilink = JSON.parse(fs.readFileSync('./database/group/antilink.json'))
 const bad = JSON.parse(fs.readFileSync('./database/group/bad.json'))
 const badword = JSON.parse(fs.readFileSync('./database/group/badword.json'))
@@ -295,7 +287,6 @@ client.on('group-participants-update', async (anu) => {
 			const isSimi = isGroup ? samih.includes(from) : false
 			const isOwner = ownerNumber.includes(sender)
 			const isAfkOn = checkAfkUser(sender)
-			const isPrem = prem.includes(sender) || isOwner
 			const isAntiLink = isGroup ? antilink.includes(from) : false
 			const isImage = type === 'imageMessage'
 			const isUrl = (url) => {
@@ -398,14 +389,6 @@ client.on('group-participants-update', async (anu) => {
    	         role = '2nd Lt IV'
    	     }
    		 
-   		 /*[-- prem name --]*/
-			var premi = '*X*'
-			if (isPrem) {
-				premi = '*✓*'
-			} 
-			if (isOwner) {
-				premi = '*owner*'
-			}
 				
 				
 	        /*[-- function Level --]*/
@@ -467,7 +450,7 @@ client.on('group-participants-update', async (anu) => {
 		
 			/*[-- limit end --]*/
             const isLimit = (sender) =>{ 
-          	if (isOwner && isPrem) {return false;}
+          	if (isOwner ) {return false;}
 		      let position = false
               for (let i of _limit) {
               if (i.id === sender) {
@@ -731,11 +714,7 @@ client.on('group-participants-update', async (anu) => {
 					client.sendMessage(from, buffer, image, {quoted: mek})
 					await limitAdd(sender)
 				break
-				//premiom
-				case 'checkprem':
-				const cekExp = ms(getPremiumExpired(sender) - Date.now())
-				reply(`*「 PREMIUM EXPIRED 」*\n\n➸ *ID*: ${sender.split('@')[0]}\n➸ *Premium left*: ${cekExp.days} day(s) ${cekExp.hours} hour(s) ${cekExp.minutes} minute(s)`)
-				break
+				
 				
 				//qr 
 				case 'qrcode':
@@ -765,7 +744,6 @@ client.on('group-participants-update', async (anu) => {
                 break
 				case 'moddroid':
 				if (!isRegistered) return reply(ind.noregis())
-				if (!isPrem) return reply(ind.premon(pushname))
 				if (isLimit(sender)) return reply(ind.limitend(pusname))
 			data = await fetchJson(`https://tobz-api.herokuapp.com/api/moddroid?q=${body.slice(10)}&apikey=BotWeA`)
 			hepi = data.result[0] 
@@ -776,7 +754,6 @@ client.on('group-participants-update', async (anu) => {
 			break
 			case 'happymod':
 				if (!isRegistered) return reply(ind.noregis())
-				if (!isPrem) return reply(ind.premon(pushname))
 				if (isLimit(sender)) return reply(ind.limitend(pusname))
 			data = await fetchJson(`https://tobz-api.herokuapp.com/api/happymod?q=${body.slice(10)}&apikey=BotWeA`)
 			hupo = data.result[0] 
@@ -888,7 +865,6 @@ client.on('group-participants-update', async (anu) => {
 					break
                 case 'joox':
 				if (!isRegistered) return reply(ind.noregis())
-				if (!isPrem) return reply(ind.premon(pushname))
 				if (isLimit(sender)) return reply(ind.limitend(pusname))
                 data = await fetchJson(`https://tobz-api.herokuapp.com/api/joox?q=${body.slice(6)}&apikey=BotWeA`, {method: 'get'})
                if (data.error) return reply(data.error)
@@ -1015,7 +991,6 @@ client.on('group-participants-update', async (anu) => {
 				client.sendMessage(from, jes, image,{quoted : mek, caption : 'DONE'})
 				break
 				case 'tiktok':
-				if (!isPrem) return reply(ind.premon(pushname))
 				anu = await fetchJson (`https://docs-jojo.herokuapp.com/api/tiktok_nowm?url=${args[0]}`, {method : 'get' })
 				if (anu.error) return reply(anu.error)
 					teks = `*From* : ${anu.result.from}\n*Judul* : ${anu.result.title}\n*Upload* : ${anu.result.uploaded}`
@@ -1056,7 +1031,6 @@ client.on('group-participants-update', async (anu) => {
 					break 
 				case 'ytmp4':
 				if (!isRegistered) return reply(ind.noregis())
-				if (!isPrem) return reply(ind.premon(pushname))
 				if (isLimit(sender)) return reply(ind.limitend(pusname))
 					if (args.length < 1) return reply('Urlnya mana um?')
 					if(!isUrl(args[0]) && !args[0].includes('youtu')) return reply(ind.stikga())
@@ -1071,7 +1045,6 @@ client.on('group-participants-update', async (anu) => {
 				break 
 				case 'ytmp3':
                     if (!isRegistered) return reply(ind.noregis())
-                    if (!isPrem) return reply(ind.premon(pushname))
                     if (isLimit(sender)) return reply(ind.limitend(pusname))
 					if (args.length < 1) return reply('Urlnya mana um?')
 					if(!isUrl(args[0]) && !args[0].includes('youtu')) return reply(ind.wrogf())
@@ -1096,7 +1069,6 @@ client.on('group-participants-update', async (anu) => {
 				break
 			    case 'fototiktok':
 				if (!isRegistered) return reply(ind.noregis())
-				if (!isPrem) return reply(ind.premon(pushname))
 				if (isLimit(sender)) return reply(ind.limitend(pusname))
                     gatauda = body.slice(12)
                     anu = await fetchJson(`https://docs-jojo.herokuapp.com/api/tiktokpp?user=${gatauda}` , {method: 'get'})
@@ -1159,7 +1131,7 @@ client.on('group-participants-update', async (anu) => {
 				if (!isRegistered) return reply(ind.noregis())
 				    const reqXp  = 5000 * (Math.pow(2, getLevelingLevel(sender)) - 1)
 				    const uangku = checkATMuser(sender)
-					await costum(ind.menu(pushname, prefix, getLevelingLevel, getLevelingXp, sender, reqXp, _registered, uangku, role, premi, client, process,kyun), text, tescuk, cr)
+					await costum(ind.menu(pushname, prefix, getLevelingLevel, getLevelingXp, sender, reqXp, _registered, uangku, role, client, process,kyun), text, tescuk, cr)
 					break
 				case 'info':
 					me = client.user
@@ -1213,7 +1185,7 @@ client.on('group-participants-update', async (anu) => {
 				   checkLimit(sender)
 					break 
 				case 'giftlimit': 
-				if (!isOwner,!isPrem) return reply(ind.premon(pushname))
+				if (!isOwner) return reply(ind.ownero())
 				const nomerr = args[0].replace('@','')
                 const jmla = args[1]
                 if (jmla <= 1) return reply(`minimal gift limit adalah 1`)
@@ -1241,21 +1213,6 @@ client.on('group-participants-update', async (anu) => {
                                 reply(`Maaf, nomor ${nomerr} tidak terdaftar di database!`)
                         }
                 break
-				case 'premlist':
-	            case 'listprem':
-	                if (!isRegistered) return reply( ind.noregis())
-	                let listPremi = '「 *PREMIUM USER LIST* 」\n\n'
-	                let nomorList = 0
-	                const deret = getAllPremiumUser()
-	                const arrayPremi = []
-	                for (let i = 0; i < deret.length; i++) {
-	                    const checkExp = ms(getPremiumExpired(deret[i]) - Date.now())
-	                    arrayPremi.push(getAllPremiumUser()[i])
-	                    nomorList++
-	                    listPremi += `${nomorList}. wa.me/${getAllPremiumUser()[i].split("@")[0]}\n➸ *Expired*: ${checkExp.days} day(s) ${checkExp.hours} hour(s) ${checkExp.minutes} minute(s)\n\n`
-	                }
-	                await reply(listPremi)
-	            break
 				case 'mutual':
                 if (!isRegistered) return reply( ind.noregis())
                 if (isGroup) return  reply( 'Command ini tidak bisa digunakan di dalam grup!')
@@ -1333,7 +1290,6 @@ client.on('group-participants-update', async (anu) => {
 					break
 				case 'brainly':
 					if (!isRegistered) return reply(ind.noregis())
-					if (!isPrem) return reply(ind.premon(pushname))
 					if (isLimit(sender)) return reply(ind.limitend(pusname))
                     brien = body.slice(9)
 					brainly(`${brien}`).then(res => {
@@ -2023,30 +1979,6 @@ client.on('group-participants-update', async (anu) => {
 						reply('Sukses broadcast group')
 					}
 					break 
-				case 'addprem':
-				if (!isOwner) return reply(ind.ownerb())
-				expired = "30d"
-				if (args.length < 1 ) return reply(' tag member')
-				mente = `${args[0].replace('@','')}@s.whatsapp.net`
-				const pnom = {id: mente , expired: Date.now() + toMs(expired) }
-				prem.push(pnom) 
-				fs.writeFileSync('./database/user/prem.json',JSON.stringify(prem))
-				reply(ind.premadd(args[0]))
-				break
-				
-				case 'delprem':
-				if (!isOwner) return reply(ind.ownerb())
-				if (args.length < 1 ) return reply(' tag member')
-				mente = `${args[0].replace('@','')}@s.whatsapp.net`
- 			   for( var i = 0; i < arr.length; i++){ 
- 		       if ( arr[i] === mente) { 
-    		      	  arr.splice(i, 1); 
-      		   	  i--; 
-      				fs.writeFileSync('./database/user/prem.json',JSON.stringify(arr))
-       			 }
- 			    }
-				reply(ind.dellprem(args[0]))
-				break 
 				case 'eval':
 				if (!isOwner) return reply(ind.ownerb())
                 if (!q) return reply(ind.wrongf())
