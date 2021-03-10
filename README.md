@@ -31,7 +31,7 @@ you've just cloned!!
 ### Setting
 Change admin and all in folder
 
-[`HERE`](https://github.com/affisjunianto/botwasapv6/admin/set.json)
+[`HERE`](https://github.com/affisjunianto/botwasapv6/blob/main/admin/set.json)
 
 
 ## Features
