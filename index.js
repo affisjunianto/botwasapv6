@@ -340,9 +340,6 @@ client.on('group-participants-update', async (anu) => {
 				per = `*[██████████] ${resl}%*`
 			} 
 				
-				
-			/*[-- auto expired --]*/
-			expiredCheck()
 			
 			/*[-- function rank --]*/
 			const levelRole = getLevelingLevel(sender)
