@@ -116,16 +116,19 @@ exports.reglevelahf = (command, pushname, getLevelingLevel, sender, ahf) => {
 	return`*Maaf ${pushname} level mu belum mencukupi*\n\n*┏⊱level mu : ${getLevelingLevel(sender)}*\n*┣⊱jenis command : ${command}*\n*┗⊱syarat level : ${ahf}*\n\n_NOTE : CHAT/SELALU ON UNTUK MENDAPATKAN XP_`
 }
 
-exports.menu = (pushname, prefix, getLevelingLevel, getLevelingXp, sender, reqXp, _registered, uangku, role, client , process) => { 
+exports.menu = (pushname, prefix, getLevelingLevel, getLevelingXp, sender, reqXp, _registered, uangku, role, client , process , pepolu) => { 
 	return `
 ${a}❏ ABOUT USER${a}
  ${a}│ Nama : ${pushname}${a}
  ${a}│ Nomer : wa.me/${sender.split("@")[0]}${a}
- ${a}│ Uang mu : Rp${uangku}${a}
+ ${a}│ Uang mu : Rp${uangku},-${a}
  ${a}│ XP : ${getLevelingXp(sender)}/${reqXp} ${a}
  ${a}│ Level : ${getLevelingLevel(sender)}${a}
  ${a}│ Role : ${role}${a}
  ${a}╰ User register : ${_registered.length}${a}
+ 
+ ${a}「total pengunaan command」${a}
+ *${pepolu} used*
 
  *${prefix}info*
  *${prefix}donasi*
@@ -136,6 +139,7 @@ ${a}❏MAKER MENU${a}
  ${a}│•${prefix}quotemaker${a}
  ${a}│•${prefix}qrcode${a}
  ${a}│•${prefix}nulis${a}
+ ${a}│•${prefix}text3d${a}
  ${a}│•${prefix}tahta${a}
  ${a}╰•${prefix}ttp${a}
  
@@ -152,8 +156,15 @@ ${a}❏FUN MENU${a}
  ${a}│•${prefix}textlight${a}
  ${a}│•${prefix}glitchtext${a}
  ${a}│•${prefix}slap${a}
+ ${a}│•${prefix}emoji${a}
+ ${a}│•${prefix}animequotes${a}
+ ${a}│•${prefix}katacinta${a}
+ ${a}│•${prefix}neonime${a}
+ ${a}│•${prefix}stickerhide${a} ~[error]~
  ${a}│•${prefix}tampar${a}
+ ${a}│•${prefix}quotes${a}
  ${a}│•${prefix}moddroid${a} 
+ ${a}│•${prefix}apkpure${a}
  ${a}╰•${prefix}happymod${a} 
  
 ${a}❏MUTUAL${a}
@@ -165,12 +176,18 @@ ${a}❏MEDIA MENU${a}
  ${a}│•${prefix}pinterest${a}
  ${a}│•${prefix}resepmasakan${a}
  ${a}│•${prefix}igstalk${a}
+ ${a}│•${prefix}beritahoax${a}
+ ${a}│•${prefix}tiktok${a}
+ ${a}│•${prefix}infonomor${a}
+ ${a}│•${prefix}fototiktok${a}
  ${a}│•${prefix}bitly${a}
  ${a}│•${prefix}tiktokstalk${a}
  ${a}│•${prefix}ssweb${a}
  ${a}╰•${prefix}kbbi${a}
  
 ${a}❏SONG${a}
+ ${a}│•${prefix}ytmp3${a}
+ ${a}│•${prefix}ytmp4${a}
  ${a}╰•${prefix}joox${a}
  
 ${a}❏NSFW${a}
@@ -224,6 +241,14 @@ ${a}❏TOOLS${a}
  ${a}│•${prefix}wasted${a}
  ${a}│•${prefix}tourl${a}
  ${a}│•${prefix}triggered${a}
+ ${a}│•${prefix}wanted${a}
+ ${a}│•${prefix}facebookpage${a}
+ ${a}│•${prefix}gtav${a}
+ ${a}│•${prefix}costumwp${a}
+ ${a}│•${prefix}pantaimalam${a}
+ ${a}│•${prefix}crossgun${a}
+ ${a}│•${prefix}bakar${a}
+ ${a}│•${prefix}pencil${a}
  ${a}╰•${prefix}tupai${a}
  
 ${a}❏CLOUD STORAGE${a}
