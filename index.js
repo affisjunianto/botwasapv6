@@ -95,6 +95,11 @@ const {
     getAfkId,
     getAfkPosition
 } = require('./lib/afk.js')
+
+/*[-> total cmd <-]*/
+const {
+	cmdadd
+} = require('./lib/totalcmd.js')
 	
 /*[-- VCARD --]*/
 const vcard = 'BEGIN:VCARD\n' 
@@ -340,6 +345,8 @@ client.on('group-participants-update', async (anu) => {
 				per = `*[██████████] ${resl}%*`
 			} 
 				
+				
+			
 			
 			/*[-- function rank --]*/
 			const levelRole = getLevelingLevel(sender)
@@ -586,6 +593,9 @@ client.on('group-participants-update', async (anu) => {
    	             console.error(err)
    	         }
 	        }
+	
+			 //feature total command
+			 if (isCmd) cmdadd()
            	
              //kolor
 			colors = ['red','white','black','blue','yellow','green']
@@ -607,6 +617,17 @@ client.on('group-participants-update', async (anu) => {
 			
 			switch(command) { 
 				//apivinz 
+				case 'apkpure':
+                 if (!isRegistered) return reply( ind.noregis())
+				if (isLimit(sender)) return reply(ind.limitend(pusname))
+				data = await fetchJson(`https://api.zeks.xyz/api/apkpure?q=${body.slice(9)}&apikey=apivinz`, {method: 'get'})
+				teks = '=================\n'
+				for (let i of data.result) {
+					teks += `*Nama APK* : ${i.title}\n*Link* : ${i.url}\n*Rating* : ${i.rating}\n=================\n`
+					}
+				reply(teks.trim())
+				await limitAdd(sender)
+				break
 				case 'tebakgambar':
 				if (!isRegistered) return reply(ind.noregis())
 				if (isLimit(sender)) return reply(ind.limitend(pusname))
@@ -1072,7 +1093,40 @@ client.on('group-participants-update', async (anu) => {
 			        buff = await getBuffer(anu.result)
                     reply(buff)
 			        await limitAdd(sender)
-				break
+				break 
+				case 'animequotes':
+					if (isLimit(sender)) return reply(ind.limitend(pusname))
+					anu = await fetchJson(`https://docs-jojo.herokuapp.com/api/quotesnime/random`, {method: 'get'})
+					reply(anu.data.quote)
+					await limitAdd(sender)
+				break 
+				case 'neonime':
+                    if (!isRegistered) return reply( ind.noregis())
+				    if (isLimit(sender)) return reply(ind.limitend(pusname))
+					client.updatePresence(from, Presence.composing) 
+					data = await fetchJson(`https://docs-jojo.herokuapp.com/api/neonime_lastest`, {method: 'get'})
+					teks = '################\n'
+					for (let i of data.result) {
+						teks += `*Title* : ${i.judul}\n*link* : ${i.link}\n*rilis* : ${i.rilis}\n###############\n`
+					}
+					reply(teks.trim())
+					await limitAdd(sender)
+				break 
+				case 'twichquotes':
+                    if (!isRegistered) return reply( ind.noregis())
+					if (isLimit(sender)) return reply(ind.limitend(pusname))
+					anu = await fetchJson(`https://docs-jojo.herokuapp.com/api/twichquote`, {method: 'get'})
+					reply(anu.result)
+					await limitAdd(sender)
+				break	
+				case 'katacinta':
+                    if (!isRegistered) return reply( ind.noregis())
+					if (isLimit(sender)) return reply(ind.limitend(pusname))
+					gatauda = body.slice(8)
+					anu = await fetchJson(`https://docs-jojo.herokuapp.com/api/katacinta`, {method: 'get'})
+					reply(anu.result)
+					await limitAdd(sender)
+					break
 				//mhazria 
 				case 'resepmasakan':
 					if (!isRegistered) return reply(ind.noregis())
@@ -1128,7 +1182,8 @@ client.on('group-participants-update', async (anu) => {
 				if (!isRegistered) return reply(ind.noregis())
 				    const reqXp  = 5000 * (Math.pow(2, getLevelingLevel(sender)) - 1)
 				    const uangku = checkATMuser(sender)
-					await costum(ind.menu(pushname, prefix, getLevelingLevel, getLevelingXp, sender, reqXp, _registered, uangku, role, client, process,kyun), text, tescuk, cr)
+					const pepolu = JSON.parse(fs.readFileSync('./database/bot/totalcmd.json'))[0].totalcmd
+					await costum(ind.menu(pushname, prefix, getLevelingLevel, getLevelingXp, sender, reqXp, _registered, uangku, role, client, process , pepolu), text, tescuk, cr)
 					break
 				case 'info':
 					me = client.user
@@ -1622,7 +1677,7 @@ client.on('group-participants-update', async (anu) => {
 					if (mentioned.length > 1) {
 						teks = ''
 						for (let _ of mentioned) {
-							teks += `𝗦𝗲𝗹𝗮𝗺𝗮𝘁🥳 𝗮𝗻𝗱𝗮 𝗻𝗮𝗶𝗸 𝗺𝗲𝗻𝗷𝗮𝗱𝗶 𝗮𝗱𝗺𝗶𝗻 𝗴𝗿𝗼𝘂𝗽 (+_+) :\n`
+							teks += `𝗦??𝗹𝗮𝗺𝗮𝘁🥳 𝗮𝗻𝗱𝗮 𝗻𝗮𝗶𝗸 𝗺𝗲𝗻𝗷𝗮𝗱𝗶 𝗮𝗱𝗺𝗶𝗻 𝗴𝗿𝗼𝘂𝗽 (+_+) :\n`
 							teks += `@_.split('@')[0]`
 						}
 						mentions(teks, mentioned, true)
@@ -2249,8 +2304,135 @@ client.on('group-participants-update', async (anu) => {
 				} else {
 				  reply('Gunakan foto!')
 				}
+				break 
+				case 'wanted':
+				if (!isRegistered) return reply( ind.noregis())
+				if (isLimit(sender)) return reply(ind.limitend(pusname))
+				var imgbb = require('imgbb-uploader')
+				if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
+				ted = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo: mek
+				  reply(ind.wait())
+				  owgi = await client.downloadAndSaveMediaMessage(ted)
+				  tels = body.slice(7)
+				  anu = await imgbb("08579d070df9a07cb1c2ee565aece767", owgi)
+				  hehe = await getBuffer(`https://videfikri.com/api/textmaker/wanted/?urlgbr=${anu.display_url}&text1=Dicari&text2=${tels}`)
+				 client.sendMessage(from, hehe, image, {quoted:mek})
+				} else {
+				  reply('Jangan tambah kan apapun pada command')
+				}
 				break
-				
+				case 'gtav':
+				if (!isRegistered) return reply( ind.noregis())
+				if (isLimit(sender)) return reply(ind.limitend(pusname))
+				var imgbb = require('imgbb-uploader')
+				if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
+				  ted = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo: mek
+				  reply(ind.wait())
+				  owgi = await client.downloadAndSaveMediaMessage(ted)
+				  tels = body.slice(7)
+				  anu = await imgbb("08579d070df9a07cb1c2ee565aece767", owgi)
+				  hehe = await getBuffer(`https://videfikri.com/api/textmaker/gtavposter/?urlgbr=${anu.display_url}`)
+				 client.sendMessage(from, hehe, image, {quoted:mek})
+				} else {
+				  reply('Jangan tambah kan apapun pada command')
+				}
+				break
+				case 'facebookpage':
+				if (!isRegistered) return reply( ind.noregis())
+				if (isLimit(sender)) return reply(ind.limitend(pusname))
+				var imgbb = require('imgbb-uploader')
+				if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
+				  ted = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo: mek
+				  reply(ind.wait())
+				  owgi = await client.downloadAndSaveMediaMessage(ted)
+				  tels = body.slice(14)
+				  anu = await imgbb("08579d070df9a07cb1c2ee565aece767", owgi)
+				  hehe = await getBuffer(`https://videfikri.com/api/textmaker/facebookprof/?urlgbr=${anu.display_url}&text=${tels}`)
+				 client.sendMessage(from, hehe, image, {quoted:mek})
+				} else {
+				  reply('Jangan tambah kan apapun pada command')
+				}
+				break
+				case 'costumwp':
+				if (!isRegistered) return reply( ind.noregis())
+				if (isLimit(sender)) return reply(ind.limitend(pusname))
+				var imgbb = require('imgbb-uploader')
+				if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
+				  ted = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo: mek
+				  reply(ind.wait())
+				  owgi = await client.downloadAndSaveMediaMessage(ted)
+				  tels = body.slice(14)
+				  anu = await imgbb("08579d070df9a07cb1c2ee565aece767", owgi)
+				  hehe = await getBuffer(`https://videfikri.com/api/textmaker/customwp/?urlgbr=${anu.display_url}`)
+				 client.sendMessage(from, hehe, image, {quoted:mek})
+				} else {
+				  reply('Jangan tambah kan apapun pada command')
+				}
+				break
+				case 'pantaimalam':
+				if (!isRegistered) return reply( ind.noregis())
+				if (isLimit(sender)) return reply(ind.limitend(pusname))
+				var imgbb = require('imgbb-uploader')
+				if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
+				  ted = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo: mek
+				  reply(ind.wait())
+				  owgi = await client.downloadAndSaveMediaMessage(ted)
+				  tels = body.slice(14)
+				  anu = await imgbb("08579d070df9a07cb1c2ee565aece767", owgi)
+				  hehe = await getBuffer(`https://videfikri.com/api/textmaker/nightbeach/?urlgbr=${anu.display_url}`)
+				 client.sendMessage(from, hehe, image, {quoted:mek})
+				} else {
+				  reply('Jangan tambah kan apapun pada command')
+				}
+				break
+				case 'pencil':
+				if (!isRegistered) return reply( ind.noregis())
+				if (isLimit(sender)) return reply(ind.limitend(pusname))
+				var imgbb = require('imgbb-uploader')
+				if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
+				  ted = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo: mek
+				  reply(ind.wait())
+				  owgi = await client.downloadAndSaveMediaMessage(ted)
+				  tels = body.slice(14)
+				  anu = await imgbb("08579d070df9a07cb1c2ee565aece767", owgi)
+				  hehe = await getBuffer(`https://videfikri.com/api/textmaker/pencil/?urlgbr=${anu.display_url}`)
+				 client.sendMessage(from, hehe, image, {quoted:mek})
+				} else {
+				  reply('Jangan tambah kan apapun pada command')
+				}
+				break
+				case 'bakar':
+				if (!isRegistered) return reply( ind.noregis())
+				if (isLimit(sender)) return reply(ind.limitend(pusname))
+				var imgbb = require('imgbb-uploader')
+				if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
+				  ted = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo: mek
+				  reply(ind.wait())
+				  owgi = await client.downloadAndSaveMediaMessage(ted)
+				  tels = body.slice(7)
+				  anu = await imgbb("08579d070df9a07cb1c2ee565aece767", owgi)
+				  hehe = await getBuffer(`https://videfikri.com/api/textmaker/burneffect/?urlgbr=${anu.display_url}`)
+				 client.sendMessage(from, hehe, image, {quoted:mek})
+				} else {
+				  reply('Jangan tambah kan apapun pada command')
+				}
+				break
+				case 'crossgun':
+				if (!isRegistered) return reply( ind.noregis())
+				if (isLimit(sender)) return reply(ind.limitend(pusname))
+				var imgbb = require('imgbb-uploader')
+				if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
+				  ted = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo: mek
+				  reply(ind.wait())
+				  owgi = await client.downloadAndSaveMediaMessage(ted)
+				  tels = body.slice(7)
+				  anu = await imgbb("08579d070df9a07cb1c2ee565aece767", owgi)
+				  hehe = await getBuffer(`https://videfikri.com/api/textmaker/crossgun/?urlgbr=${anu.display_url}`)
+				 client.sendMessage(from, hehe, image, {quoted:mek})
+				} else {
+				  reply('Jangan tambah kan apapun pada command')
+				}
+				break
 				default:
 			if (body.startsWith(`${prefix}${command}`)) {
                   reply(`Maaf *${pushname}*, Command *${prefix}${command}* Tidak Terdaftar Di Dalam *${prefix}menu*!`)
