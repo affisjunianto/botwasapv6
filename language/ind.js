@@ -148,6 +148,7 @@ ${a}❏FUN MENU${a}
  ${a}│•${prefix}artinama${a}
  ${a}│•${prefix}chord${a}
  ${a}│•${prefix}bisakah${a}
+ ${a}│•${prefix}readmore${a}
  ${a}│•${prefix}kapankah${a}
  ${a}│•${prefix}apakah${a}
  ${a}│•${prefix}rate${a}
@@ -231,6 +232,7 @@ ${a}❏GROUP MENU${a}
  ${a}│•${prefix}simih [1/0]${a}
  ${a}│•${prefix}welcome [1/0]${a}
  ${a}│•${prefix}antilink [1/0]${a}
+ ${a}│•${prefix}join${a}
  ${a}╰•${prefix}nobadword [enable/disable]${a}
  
 ${a}❏TOOLS${a}
