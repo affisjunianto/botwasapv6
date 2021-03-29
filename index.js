@@ -246,8 +246,10 @@ client.on('group-participants-update', async (anu) => {
 	
 
 	/*[-- Update Message --]*/
-	client.on('message-new', async (mek) => {
+	client.on('chat-update', async (mek) => {
 		try {
+             if (!mek.hasNewMessage) return
+            mek = JSON.parse(JSON.stringify(mek)).messages[0]
 			if (!mek.message) return
 			if (mek.key && mek.key.remoteJid == 'status@broadcast') return
 			if (mek.key.fromMe) return
