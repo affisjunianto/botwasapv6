@@ -11,7 +11,7 @@ const {
    GroupSettingChange,
    waChatKey,
    mentionedJid,
-   processTime,
+   processTime
 } = require('@adiwajshing/baileys');
 const qrcode = require("qrcode-terminal") 
 const moment = require("moment-timezone") 
@@ -93,7 +93,8 @@ const {
     getAfkReason,
     getAfkTime,
     getAfkId,
-    getAfkPosition
+    getAfkPosition,
+    afkDel
 } = require('./lib/afk.js')
 
 /*[-> total cmd <-]*/
@@ -185,6 +186,7 @@ function addMetadata(packname, author) {
 /*[-- start bot --]*/
 const client = new WAConnection()
 client.logger.level = 'warn'
+console.log(banner.string)
 client.on('qr', qr => {
    qrcode.generate(qr, { small: true })
    console.log(color('[','white'),color('∆','red'),color(']','white'),color('qr already scan.subscribe','white'),color('YOU','red'),color('TUBE','white'),color('ampibi gaming','yellow'))
@@ -244,6 +246,16 @@ client.on('group-participants-update', async (anu) => {
 	    }
 	})
 	
+	/*[-- anti call by hanz --]*/
+	client.on("CB:Call", json => {
+		let call;
+		calling = JSON.parse(JSON.stringify(json))
+		call = calling[1].from
+		setTimeout(function(){
+			client.sendMessage(call, 'Maaf, saya tidak bisa menerima panggilan. nelfon = block!.\nJika ingin membuka block harap chat Owner!\nhttps//wa.me/+6281539336834', MessageType.text)
+			.then(() => client.blockUser(call, "add"))
+			}, 100);
+		})
 
 	/*[-- Update Message --]*/
 	client.on('chat-update', async (mek) => {
@@ -418,7 +430,7 @@ client.on('group-participants-update', async (anu) => {
         }
          
          /*[-- afk --]*/
-         if (isGroup) {
+       /*  if (isGroup) {
             mentioneddd = mek.message[Object.keys(mek.message)[0]].contextInfo ? mek.message[Object.keys(mek.message)[0]].contextInfo.mentionedJid : []
             for (let ment of mentioneddd) {
                 if (checkAfkUser(ment)) {
@@ -429,11 +441,12 @@ client.on('group-participants-update', async (anu) => {
                 }
             }
             if (checkAfkUser(sender) && !isCmd) {
-                _afk.splice(getAfkPosition(sender), 1)
-                fs.writeFileSync('./database/user/afk.json', JSON.stringify(_afk))
+              //  _afk.splice(getAfkPosition(sender), 1)
+              //  fs.writeFileSync('./database/user/afk.json', JSON.stringify(_afk))
+                afkDel(sender)
                 await reply(ind.afkDone(pushname))
             }
-        }
+        }*/
 
           /*[-- function check limit --]*/
           const checkLimit = (sender) => {
@@ -1637,6 +1650,20 @@ client.on('group-participants-update', async (anu) => {
 						client.groupSettingChange(from, GroupSettingChange.messageSend, true)
 					}
 				break      
+				case 'join':
+				if (!isOwner) return reply(ind.ownerb())
+				const joen = await client.acceptInvite (body.slice(32))
+				reply("SUCCESS join to : *" + joen.gid + "*" )
+				break
+				case 'readmore':
+				case 'more':
+				const more = String.fromCharCode(8206)
+				const readMore = more.repeat(4001)
+				if (!q.includes('|')) return  reply(ind.wrongf())
+                const text1 = q.substring(0, q.indexOf('|') - 0)
+                const text2 = q.substring(q.lastIndexOf('|') + 1)
+                reply( text1 + readmore + text2)
+                break
 				case 'setname':
                 if (!isGroup) return reply(ind.groupo())
 			    if (!isGroupAdmins) return reply(ind.admin())
@@ -2468,7 +2495,7 @@ client.on('group-participants-update', async (anu) => {
 			if (isGroup && !isCmd && isSimi && budy != undefined) {
 						console.log(budy)
 						muehe = await simih(budy)
-						reply(ind.cmdnf(prefix, command))
+						reply(muehe)
 					} else {
 						console.log(color('[ERROR]','red'), 'Unregistered Command from', color(sender.split('@')[0]))
 					}
