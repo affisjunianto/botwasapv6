@@ -245,17 +245,6 @@ client.on('group-participants-update', async (anu) => {
 	    	blocked.push(i.replace('c.us','s.whatsapp.net'))
 	    }
 	})
-	
-	/*[-- anti call by hanz --]*/
-	client.on("CB:Call", json => {
-		let call;
-		calling = JSON.parse(JSON.stringify(json))
-		call = calling[1].from
-		setTimeout(function(){
-			client.sendMessage(call, 'Maaf, saya tidak bisa menerima panggilan. nelfon = block!.\nJika ingin membuka block harap chat Owner!\nhttps//wa.me/+6281539336834', MessageType.text)
-			.then(() => client.blockUser(call, "add"))
-			}, 100);
-		})
 
 	/*[-- Update Message --]*/
 	client.on('chat-update', async (mek) => {
@@ -940,14 +929,12 @@ client.on('group-participants-update', async (anu) => {
                     await client.sendMessage(from, ppimg, image, {quoted: mek, caption: ind.registered(namaUser, umurUser, serialUser, time, sender)})
                     addATM(sender)
                     addLevelingId(sender)
-                    checkLimit(sender)
                     console.log(color('[REGISTER]'), color(time, 'yellow'), 'Name:', color(namaUser, 'cyan'), 'Age:', color(umurUser, 'cyan'), 'Serial:', color(serialUser, 'cyan'), 'in', color(sender || groupName))
                 } else {
                     addRegisteredUser(sender, namaUser, umurUser, time, serialUser)
                     await client.sendMessage(from, ppimg, image, {quoted: mek, caption: ind.registered(namaUser, umurUser, serialUser, time, sender)})
                     addATM(sender)
                     addLevelingId(sender)
-                    checkLimit(sender)
                     console.log(color('[REGISTER]'), color(time, 'yellow'), 'Name:', color(namaUser, 'cyan'), 'Age:', color(umurUser, 'cyan'), 'Serial:', color(serialUser, 'cyan'))
                 }
 				break
